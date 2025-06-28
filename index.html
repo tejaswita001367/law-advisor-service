@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Law Advisor</title>
+</head>
+<body>
+<h2>Legal Query Search</h2>
+<input type="text" id="query" placeholder="Enter a legal query like 'murder'">
+<button onclick="searchLaw()">Search</button>
+
+<h3>Answer:</h3>
+<div id="result"></div>
+
+<script>
+    async function searchLaw() {
+        const query = document.getElementById('query').value;
+
+        const response = await fetch(`http://127.0.0.1:8000/search-law?query=${encodeURIComponent(query)}`);
+        const data = await response.json();
+
+        const resultDiv = document.getElementById('result');
+
+        if (data.section) {
+            resultDiv.innerHTML = `
+                    <p><strong>Keyword:</strong> ${data.keyword}</p>
+                    <p><strong>Section:</strong> ${data.section}</p>
+                    <p><strong>Description:</strong> ${data.description}</p>
+                    <p><strong>Punishment:</strong> ${data.punishment}</p>
+                `;
+        } else {
+            resultDiv.innerHTML = `<p>${data.message}</p>`;
+        }
+    }
+</script>
+</body>
+</html>
+
